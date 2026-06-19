@@ -189,9 +189,14 @@ def parse_time(ntp):
 async def main():
     pool = socketpool.SocketPool(wifi.radio)
     ntp = adafruit_ntp.NTP(pool, tz_offset=int(os.getenv('CIRCUITPY_TZ_OFFSET')), cache_seconds=int(os.getenv('CIRCUITPY_NTP_CACHE_SECONDS')), server=os.getenv('CIRCUITPY_NTP_SERVER'))
-    leds = parse_time(ntp.datetime)
+    while True:
+        leds = parse_time(ntp.datetime)
     
-    await draw_matrix(leds)
+        await draw_matrix(leds)
+
+
+asyncio.run(main())
+        
     
 
 
