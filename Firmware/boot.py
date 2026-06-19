@@ -103,10 +103,9 @@ async def main():
 
     print("my IP addr:", wifi.radio.ipv4_address)
     
-    current_time = time.monotonic()
+    start_time = time.monotonic()
     while True:
-        if time.monotonic() - current_time > 60:
-            current_time = time.monotonic()
+        if start_time - time.monotonic() < 5:
             await draw_matrix(startup_matrix)
         else:
             break
