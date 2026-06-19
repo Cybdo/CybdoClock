@@ -112,6 +112,7 @@ async def main():
             break
 
 
+asyncio.run(main())
 
     
 
