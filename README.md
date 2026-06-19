@@ -17,6 +17,12 @@ pdf at `./zine.pdf`
 - wall-mountable via command strips
 - stand included for desktop use
 
+# Assembly
+
+The housing requires 4x M3 screws, as well as 4x M3 heat-set inserts, and 4x 5mm diameter, 2.5mm thick magnets.
+Each faceplate also requires 4x 4x 5mm diameter, 2.5mm thick magnets, in the opposite polarity to the housing.
+Magnets should be able to friction fit and stay in place, however a drop of superglue can aid in its placement.
+
 # Usage
 - flash circuitpython 10 onto the ESP-32 via USB-C.
 - Copy the firmware folder onto the CIRCUITPY drive, and create settings.toml using settings.toml.example.
