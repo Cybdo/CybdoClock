@@ -1,0 +1,5 @@
+asyncio
+adafruit_ticks
+adafruit_bus_device
+adafruit_74hc595
+adafruit_ntp

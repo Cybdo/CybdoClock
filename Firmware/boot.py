@@ -1,5 +1,5 @@
 import asyncio
-from time import sleep
+import time
 import board
 import digitalio
 import adafruit_74hc595
@@ -26,14 +26,6 @@ refreshtime = 0.02
 
 
 
-async def draw_column(column, rows):
-    colsarr[column].value = True
-    for row in rows:
-        rowsarr[row].value = True
-    await asyncio.sleep(refreshtime)
-    colsarr[column].value = False
-    for row in rows:
-        rowsarr[row].value = False
 
 async def draw_row(row, columns):
     rowsarr[row].value = True
@@ -77,27 +69,30 @@ startup_matrix = {
 
 
 no_wifi_matrix = {
-    0:  [0,0,0,0,0,0,0,0,0,1,0,0,0,0],
-    1:  [0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-    2:  [0,0,0,0,0,1,1,1,0,0,0,0,0,0],
-    3:  [0,0,0,0,1,1,1,1,0,0,0,0,0,0],
-    4:  [0,0,0,0,0,1,0,0,1,0,0,0,0,0],
-    5:  [0,0,1,1,1,1,1,1,1,1,1,1,1,0],
-    6:  [0,1,1,0,0,1,0,0,1,0,0,0,0,0],
-    7:  [0,1,1,0,0,1,0,0,1,0,0,0,0,0],
-    8:  [0,0,1,1,1,1,1,1,1,1,1,1,1,0],
-    9:  [1,0,0,0,0,1,0,0,1,0,0,0,0,0],
-    10: [0,0,0,0,1,0,0,1,1,0,0,0,0,0],
-    11: [0,0,0,0,0,0,1,1,0,0,0,0,0,0],
-    12: [0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-    13: [0,0,0,0,0,0,0,0,0,1,0,0,0,0],
-}
+ 0: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+ 1: [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+ 2: [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+ 3: [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0],
+ 4: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
+ 5: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+ 6: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0],
+ 7: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0],
+ 8: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0],
+ 9: [0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+ 10: [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0],
+ 11: [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+ 12: [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+ 13: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+
+
 
 
 async def main():
     
     if os.getenv('CIRCUITPY_WIFI_SSID') is None or os.getenv('CIRCUITPY_WIFI_PASSWORD') is None:
         print("no wifi creds")
+        while True:
+            await draw_matrix(no_wifi_matrix)
         
         
         
@@ -107,6 +102,18 @@ async def main():
                             password=os.getenv('CIRCUITPY_WIFI_PASSWORD'))
 
     print("my IP addr:", wifi.radio.ipv4_address)
+    
+    current_time = time.monotonic()
+    while True:
+        if time.monotonic() - current_time > 60:
+            current_time = time.monotonic()
+            await draw_matrix(startup_matrix)
+        else:
+            break
+
+
+
+    
 
 
 
